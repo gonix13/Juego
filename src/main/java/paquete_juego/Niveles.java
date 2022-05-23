@@ -1,35 +1,35 @@
 package paquete_juego;
 
 public class Niveles {
-	private final int incrementoEspecial;
+	private final int incremEsp;
 	private final int umbralNivel;
 	
-	public Niveles(int iE, int uN){
-		incrementoEspecial = iE;
-		umbralNivel = uN;
+	public Niveles(final int incremEsp,final int umbralNivel){
+		this.incremEsp = incremEsp;
+		this.umbralNivel = umbralNivel;
 	}
 	
-	public int actualizarNiveles(TablaJugadores tJ, TablaEquipos tE){
+	public int actualizarNiveles(final TablaJugadores tablaJugadores,final TablaEquipos tablaEquipos){
 		int puntosEquipo;
 		String mejorEquipo;
 		byte encontrado;
 		int maxPuntos;
 		int codError = 0;  // valor que devolver (0 == sin incidencias)
-		int numJugadores = tJ.obtenerNumJugadores();  // obtiene cantidad de jugadores de la tabla
-		int numEquipos = tE.obtenerNumEquipos();  // obtiene cantidad de equipos de la tabla
+		final int numJugadores = tablaJugadores.obtenerNumJugadores();  // obtiene cantidad de jugadores de la tabla
+		final int numEquipos = tablaEquipos.obtenerNumEquipos();  // obtiene cantidad de equipos de la tabla
 
 		if (numJugadores * numEquipos == 0) {
 			codError = 1;  // 1 == al menos una tabla SIN entradas
 		}
 		else{
-			maxPuntos = getMaxPuntos(tE, numEquipos);
+			maxPuntos = getMaxPuntos(tablaEquipos, numEquipos);
 			// busca equipos con mayor cantidad de puntos (mejores equipos)
 			for (int i=0; i<numEquipos; i++){
-				puntosEquipo = tE.obtenerPuntos(i);
+				puntosEquipo = tablaEquipos.obtenerPuntos(i);
 				if (puntosEquipo == maxPuntos){
-					mejorEquipo = tE.obtenerNombre(i);
+					mejorEquipo = tablaEquipos.obtenerNombre(i);
 					// busca jugadores de mejor equipo
-					encontrado = buscaJugadoresMejorEquipo(tJ, mejorEquipo, numJugadores);
+					encontrado = buscaJugadoresMejorEquipo(tablaJugadores, mejorEquipo, numJugadores);
 					if (encontrado == 0){
 						codError = 2;  // 2 == al menos un mejor equipo SIN deportistas
 					}
@@ -40,38 +40,38 @@ public class Niveles {
 		return codError;
 	}
 
-	private byte buscaJugadoresMejorEquipo(TablaJugadores tJ, String mejorEquipo, int numJugadores) {
+	private byte buscaJugadoresMejorEquipo(final TablaJugadores tablaJugadores, final String mejorEquipo, final int numJugadores) {
 		byte encontrado = 0;
 		String equipoJugador;
 		for (int j = 0; j< numJugadores; j++){
-			equipoJugador = tJ.obtenerEquipo(j);
+			equipoJugador = tablaJugadores.obtenerEquipo(j);
 			if (mejorEquipo.equals(equipoJugador)){
 				encontrado = 1;
-				actualizarNivel(tJ, j);
+				actualizarNivel(tablaJugadores, j);
 			}
 		}
 		return encontrado;
 	}
 
-	private void actualizarNivel(TablaJugadores tJ, int j) {
+	private void actualizarNivel(final TablaJugadores tablaJugadores, final int indice) {
 		int nivelJugador;
 		boolean esPreJugador;
-		nivelJugador = tJ.obtenerNivel(j);
-		esPreJugador = tJ.obtenerEsPre(j);
+		nivelJugador = tablaJugadores.obtenerNivel(indice);
+		esPreJugador = tablaJugadores.obtenerEsPre(indice);
 		if (esPreJugador && nivelJugador < umbralNivel ){
-			tJ.actualizarNivel(j,incrementoEspecial);
+			tablaJugadores.actualizarNivel(indice, incremEsp);
 		}
 		else {
-			tJ.actualizarNivel(j, 1);
+			tablaJugadores.actualizarNivel(indice, 1);
 		}
 	}
 
-	private int getMaxPuntos(TablaEquipos tE, int numEquipos) {
+	private int getMaxPuntos(final TablaEquipos tablaEquipos, final int numEquipos) {
 		int puntosEquipo;
 		int maxPuntos = 0;
 		// busca mayor cantidad de puntos entre equipos
 		for (int i = 0; i< numEquipos; i++){
-			puntosEquipo = tE.obtenerPuntos(i);  // puntos del equipo #i en la tabla
+			puntosEquipo = tablaEquipos.obtenerPuntos(i);  // puntos del equipo #i en la tabla
 			if (puntosEquipo > maxPuntos){
 				maxPuntos = puntosEquipo;
 			}
