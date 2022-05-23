@@ -18,8 +18,9 @@ public class Niveles {
 		int numJugadores = tJ.obtenerNumJugadores();  // obtiene cantidad de jugadores de la tabla
 		int numEquipos = tE.obtenerNumEquipos();  // obtiene cantidad de equipos de la tabla
 
-		if (numJugadores * numEquipos == 0)
+		if (numJugadores * numEquipos == 0) {
 			codError = 1;  // 1 == al menos una tabla SIN entradas
+		}
 		else{
 			maxPuntos = getMaxPuntos(tE, numEquipos);
 			// busca equipos con mayor cantidad de puntos (mejores equipos)
@@ -29,7 +30,9 @@ public class Niveles {
 					mejorEquipo = tE.obtenerNombre(i);
 					// busca jugadores de mejor equipo
 					encontrado = buscaJugadoresMejorEquipo(tJ, mejorEquipo, numJugadores);
-					if (encontrado == 0)codError = 2;  // 2 == al menos un mejor equipo SIN deportistas
+					if (encontrado == 0){
+						codError = 2;  // 2 == al menos un mejor equipo SIN deportistas
+					}
 				}
 
 			}
@@ -55,10 +58,12 @@ public class Niveles {
 		boolean esPreJugador;
 		nivelJugador = tJ.obtenerNivel(j);
 		esPreJugador = tJ.obtenerEsPre(j);
-		if (esPreJugador && nivelJugador < umbralNivel )
+		if (esPreJugador && nivelJugador < umbralNivel ){
 			tJ.actualizarNivel(j,incrementoEspecial);
-		else
-			tJ.actualizarNivel(j,1);
+		}
+		else {
+			tJ.actualizarNivel(j, 1);
+		}
 	}
 
 	private int getMaxPuntos(TablaEquipos tE, int numEquipos) {
@@ -67,7 +72,9 @@ public class Niveles {
 		// busca mayor cantidad de puntos entre equipos
 		for (int i = 0; i< numEquipos; i++){
 			puntosEquipo = tE.obtenerPuntos(i);  // puntos del equipo #i en la tabla
-			if (puntosEquipo > maxPuntos) maxPuntos = puntosEquipo;
+			if (puntosEquipo > maxPuntos){
+				maxPuntos = puntosEquipo;
+			}
 		}
 		return maxPuntos;
 	}
